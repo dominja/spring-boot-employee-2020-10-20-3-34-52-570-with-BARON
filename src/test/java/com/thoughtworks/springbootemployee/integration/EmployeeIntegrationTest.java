@@ -11,6 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static org.junit.Assert.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -84,5 +88,19 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.age").value(updatedEmployee.getAge()))
                 .andExpect(jsonPath("$.gender").value(updatedEmployee.getGender()))
                 .andExpect(jsonPath("$.salary").value(updatedEmployee.getSalary()));
+    }
+
+    @Test
+    void should_delete_employees_when_deleted() throws Exception {
+        // given
+        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee createdEmployee = employeeRepository.save(employee);
+
+        // when
+        mockMvc.perform(delete("/employees/" + createdEmployee.getId())).andExpect(status().isOk());
+
+        // then
+        Optional<Employee> fetchedEmployee = employeeRepository.findById(employee.getId());
+        assertFalse(fetchedEmployee.isPresent());
     }
 }
