@@ -115,4 +115,24 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.gender").value("female"))
                 .andExpect(jsonPath("$.salary").value(10));
     }
+
+    @Test
+    void should_return_employee_filtered_by_gender_when_search_by_gender_given_gender_female() throws Exception {
+        //given
+        Employee employee1 = new Employee(1, "nelly", 18, "female", 10);
+        Employee employee2 = new Employee(2, "nelly", 18, "male", 10);
+        Employee employee3 = new Employee(3, "nelly", 18, "male", 10);
+
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
+        employeeRepository.save(employee3);
+        // when then
+        mockMvc.perform(get("/employees?gender=female" ))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].name").value("nelly"))
+                .andExpect(jsonPath("$[0].age").value(18))
+                .andExpect(jsonPath("$[0].gender").value("female"))
+                .andExpect(jsonPath("$[0].salary").value(10));
+    }
 }
