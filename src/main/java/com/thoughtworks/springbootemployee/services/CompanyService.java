@@ -2,7 +2,7 @@ package com.thoughtworks.springbootemployee.services;
 
 import com.thoughtworks.springbootemployee.models.Company;
 import com.thoughtworks.springbootemployee.models.Employee;
-import com.thoughtworks.springbootemployee.repositories.CompanyRepositoryLegacy;
+import com.thoughtworks.springbootemployee.repository.CompanyRepositoryLegacy;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
