@@ -1,39 +1,49 @@
 package com.thoughtworks.springbootemployee.services;
 
 import com.thoughtworks.springbootemployee.models.Employee;
-import com.thoughtworks.springbootemployee.repositories.EmployeeRepositoryLegacy;
+import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
 
-    private EmployeeRepositoryLegacy employeeRepository;
+    private IEmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepositoryLegacy employeeRepository) {
+    public EmployeeService(IEmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
     public List<Employee> getAll() {
-        return employeeRepository.getAll();
+        return employeeRepository.findAll();
     }
 
     public Employee create(Employee newEmployee) {
-        return employeeRepository.create(newEmployee);
+        return employeeRepository.save(newEmployee);
     }
 
-    public Employee searchById(Integer id) {
+    public Optional<Employee> searchById(Integer id) {
         return employeeRepository.findById(id);
     }
 
     public Employee update(Integer id, Employee employee) {
-        return employeeRepository.update(id, employee);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            optionalEmployee.get().setSalary(employee.getSalary());
+            optionalEmployee.get().setAge(employee.getAge());
+            optionalEmployee.get().setGender(employee.getGender());
+            optionalEmployee.get().setName(employee.getName());
+            return employeeRepository.save(optionalEmployee.get());
+        }
+        return null;
     }
 
     public void delete(Integer id) {
-        employeeRepository.delete(id);
+        employeeRepository.deleteById(id);
     }
 
     public List<Employee> searchByGender(String gender) {
@@ -41,9 +51,8 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeeByPageAndPageSize(int page, int pageSize) {
-        return employeeRepository.getAll().stream()
-                .skip(pageSize * (page - 1))
-                .limit(pageSize)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+
+        return employeeRepository.findAll(pageable).toList();
     }
 }
