@@ -1,21 +1,17 @@
 package com.thoughtworks.springbootemployee.models;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Company {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String companyName;
-    private List<Employee> employees = new ArrayList<>();
-
-    public Company() {
-    }
-
-    public Company(Integer id, String companyName) {
-        this.id = id;
-        this.companyName = companyName;
-    }
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name="company_id")
+    private List<Employee> employees;
 
     public String getCompanyName() {
         return companyName;
