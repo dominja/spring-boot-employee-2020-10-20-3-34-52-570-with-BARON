@@ -11,9 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
@@ -123,14 +120,14 @@ class EmployeeIntegrationTest {
     void should_return_employee_filtered_by_gender_when_search_by_gender_given_gender_female() throws Exception {
         //given
         Employee employee1 = new Employee("nelly", 18, "female", 10);
-        Employee employee2 = new Employee( "nelly", 18, "male", 10);
-        Employee employee3 = new Employee( "nelly", 18, "male", 10);
+        Employee employee2 = new Employee("nelly", 18, "male", 10);
+        Employee employee3 = new Employee("nelly", 18, "male", 10);
 
         employeeRepository.save(employee1);
         employeeRepository.save(employee2);
         employeeRepository.save(employee3);
         // when then
-        mockMvc.perform(get("/employees?gender=female" ))
+        mockMvc.perform(get("/employees?gender=female"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").value("nelly"))
@@ -142,16 +139,16 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_2_employee_when_getByEmployeeByPage_given_3_employees_page_1_pageSize_2() throws Exception {
         //given
-        Employee employee1 = new Employee( "nelly", 18, "female", 10);
-        Employee employee2 = new Employee( "janelle", 18, "female", 10);
-        Employee employee3 = new Employee( "cedric", 18, "male", 10);
+        Employee employee1 = new Employee("nelly", 18, "female", 10);
+        Employee employee2 = new Employee("janelle", 18, "female", 10);
+        Employee employee3 = new Employee("cedric", 18, "male", 10);
 
         employeeRepository.save(employee1);
         employeeRepository.save(employee2);
         employeeRepository.save(employee3);
 
         // when then
-        mockMvc.perform(get("/employees?page=1&pageSize=2" ))
+        mockMvc.perform(get("/employees?page=1&pageSize=2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").value("nelly"))
@@ -163,5 +160,27 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$[1].age").value(18))
                 .andExpect(jsonPath("$[1].gender").value("female"))
                 .andExpect(jsonPath("$[1].salary").value(10));
+    }
+
+
+    @Test
+    void should_return_1_employee_when_getByEmployeeByPage_given_3_employees_page_2_pageSize_2() throws Exception {
+        //given
+        Employee employee1 = new Employee("nelly", 18, "female", 10);
+        Employee employee2 = new Employee("janelle", 18, "female", 10);
+        Employee employee3 = new Employee("cedric", 18, "male", 10);
+
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
+        employeeRepository.save(employee3);
+
+        // when then
+        mockMvc.perform(get("/employees?page=2&pageSize=2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].name").value("cedric"))
+                .andExpect(jsonPath("$[0].age").value(18))
+                .andExpect(jsonPath("$[0].gender").value("male"))
+                .andExpect(jsonPath("$[0].salary").value(10));
     }
 }
