@@ -41,7 +41,7 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_all_employees_when_called_get_all() throws Exception {
         //given
-        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee employee = new Employee("nelly", 18, "female", 10);
         employeeRepository.save(employee);
         // when then
         mockMvc.perform(get("/employees"))
@@ -56,7 +56,7 @@ class EmployeeIntegrationTest {
     @Test
     void should_create_employees_when_created() throws Exception {
         //given
-        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee employee = new Employee("nelly", 18, "female", 10);
         String employeeAsJson = gson.toJson(employee, Employee.class);
 
         // when then
@@ -73,9 +73,9 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_updated_employee_when_update_given_employee() throws Exception {
         //given
-        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee employee = new Employee("nelly", 18, "female", 10);
         Employee createdEmployee = employeeRepository.save(employee);
-        Employee updatedEmployee = new Employee(createdEmployee.getId(), "yllen", 19, "female", 100);
+        Employee updatedEmployee = new Employee("yllen", 19, "female", 100);
 
         // when then
         mockMvc.perform(put("/employees/" + createdEmployee.getId())
@@ -83,7 +83,7 @@ class EmployeeIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(updatedEmployee.getId()))
+                .andExpect(jsonPath("$.id").value(createdEmployee.getId()))
                 .andExpect(jsonPath("$.name").value(updatedEmployee.getName()))
                 .andExpect(jsonPath("$.age").value(updatedEmployee.getAge()))
                 .andExpect(jsonPath("$.gender").value(updatedEmployee.getGender()))
@@ -93,7 +93,7 @@ class EmployeeIntegrationTest {
     @Test
     void should_delete_employees_when_deleted() throws Exception {
         // given
-        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee employee = new Employee("nelly", 18, "female", 10);
         Employee createdEmployee = employeeRepository.save(employee);
 
         // when
@@ -107,7 +107,7 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_employee_when_search_by_id_given_employeeID() throws Exception {
         //given
-        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee employee = new Employee("nelly", 18, "female", 10);
         Employee createdEmployee = employeeRepository.save(employee);
         // when then
         mockMvc.perform(get("/employees/" + createdEmployee.getId()))
@@ -122,9 +122,9 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_employee_filtered_by_gender_when_search_by_gender_given_gender_female() throws Exception {
         //given
-        Employee employee1 = new Employee(1, "nelly", 18, "female", 10);
-        Employee employee2 = new Employee(2, "nelly", 18, "male", 10);
-        Employee employee3 = new Employee(3, "nelly", 18, "male", 10);
+        Employee employee1 = new Employee("nelly", 18, "female", 10);
+        Employee employee2 = new Employee( "nelly", 18, "male", 10);
+        Employee employee3 = new Employee( "nelly", 18, "male", 10);
 
         employeeRepository.save(employee1);
         employeeRepository.save(employee2);
@@ -142,9 +142,9 @@ class EmployeeIntegrationTest {
     @Test
     void should_return_2_employee_when_getByEmployeeByPage_given_3_employees_page_1_pageSize_2() throws Exception {
         //given
-        Employee employee1 = new Employee(null, "nelly", 18, "female", 10);
-        Employee employee2 = new Employee(null, "janelle", 18, "female", 10);
-        Employee employee3 = new Employee(null, "cedric", 18, "male", 10);
+        Employee employee1 = new Employee( "nelly", 18, "female", 10);
+        Employee employee2 = new Employee( "janelle", 18, "female", 10);
+        Employee employee3 = new Employee( "cedric", 18, "male", 10);
 
         employeeRepository.save(employee1);
         employeeRepository.save(employee2);
@@ -164,5 +164,4 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$[1].gender").value("female"))
                 .andExpect(jsonPath("$[1].salary").value(10));
     }
-
 }
