@@ -31,8 +31,15 @@ public class EmployeeService {
     }
 
     public Employee update(Integer id, Employee employee) {
-        employee.setId(id);
-        return employeeRepository.save(employee);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            optionalEmployee.get().setSalary(employee.getSalary());
+            optionalEmployee.get().setAge(employee.getAge());
+            optionalEmployee.get().setGender(employee.getGender());
+            optionalEmployee.get().setName(employee.getName());
+            return employeeRepository.save(optionalEmployee.get());
+        }
+        return null;
     }
 
     public void delete(Integer id) {
