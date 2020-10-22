@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/employees")
@@ -40,7 +39,7 @@ public class EmployeesController {
     }
 
     @GetMapping("/{employeeId}")
-    public Employee searchById(@PathVariable("employeeId") Integer employeeId) {
+    public Optional<Employee> searchById(@PathVariable("employeeId") Integer employeeId) {
         return employeeService.searchById(employeeId);
     }
 
