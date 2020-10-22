@@ -28,6 +28,7 @@ class EmployeeIntegrationTest {
 
     @AfterEach
     void tearDown() {
+        employeeRepository.deleteAll();
     }
 
     private final Gson gson = new Gson();
@@ -63,22 +64,4 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.gender").value("female"))
                 .andExpect(jsonPath("$.salary").value(10));
     }
-
-    @Test
-    void should_delete_employees_when_deleted() throws Exception {
-        //given
-        Employee employee = new Employee(1, "nelly", 18, "female", 10);
-        String employeeAsJson = gson.toJson(employee, Employee.class);
-        employeeRepository.save(employee);
-        // when then
-        mockMvc.perform(post("/employees")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(employeeAsJson))
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value("nelly"))
-                .andExpect(jsonPath("$.age").value(18))
-                .andExpect(jsonPath("$.gender").value("female"))
-                .andExpect(jsonPath("$.salary").value(10));
-    }
-
 }
