@@ -39,11 +39,10 @@ public class CompanyService {
         return Collections.emptyList();
     }
 
-    public Company update(Integer id, Company expectedCompany) {
+    public Company update(Integer id, Company updatedCompany) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
         if (optionalCompany.isPresent()) {
-            optionalCompany.get().setCompanyName(expectedCompany.getCompanyName());
-            optionalCompany.get().setEmployees(expectedCompany.getEmployees());
+            optionalCompany.get().setCompanyName(updatedCompany.getCompanyName());
             return companyRepository.save(optionalCompany.get());
         }
         return null;
