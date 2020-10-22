@@ -14,10 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -102,5 +99,20 @@ class EmployeeIntegrationTest {
         // then
         Optional<Employee> fetchedEmployee = employeeRepository.findById(employee.getId());
         assertFalse(fetchedEmployee.isPresent());
+    }
+
+    @Test
+    void should_return_employee_when_search_by_id_given_employeeID() throws Exception {
+        //given
+        Employee employee = new Employee(1, "nelly", 18, "female", 10);
+        Employee createdEmployee = employeeRepository.save(employee);
+        // when then
+        mockMvc.perform(get("/employees/" + createdEmployee.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("nelly"))
+                .andExpect(jsonPath("$.age").value(18))
+                .andExpect(jsonPath("$.gender").value("female"))
+                .andExpect(jsonPath("$.salary").value(10));
     }
 }
