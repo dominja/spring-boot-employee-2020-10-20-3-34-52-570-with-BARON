@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CompanyRepository {
+public class CompanyRepositoryLegacy {
 
     private final List<Company> companies = new ArrayList<>();
 

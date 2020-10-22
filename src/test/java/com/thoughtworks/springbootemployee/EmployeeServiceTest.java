@@ -1,12 +1,10 @@
 package com.thoughtworks.springbootemployee;
 
 import com.thoughtworks.springbootemployee.models.Employee;
-import com.thoughtworks.springbootemployee.repositories.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repositories.EmployeeRepositoryLegacy;
 import com.thoughtworks.springbootemployee.services.EmployeeService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +22,7 @@ class EmployeeServiceTest {
     @Test
     void should_return_2_when_get_employees_given_2_employees() {
         //given
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.getAll()).thenReturn(asList(new Employee(), new Employee()));
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -39,7 +37,7 @@ class EmployeeServiceTest {
     void should_return_employee_with_id_1_when_create_given_employee_with_id_of_1() {
         //given
         Employee newEmployee = new Employee(1, "", 20, "male", 1000);
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.create(newEmployee)).thenReturn(newEmployee);
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -54,7 +52,7 @@ class EmployeeServiceTest {
     void should_return_employee_when_searchById_given_employee_with_id_of_1() {
         //given
         Employee employee = new Employee(1, "", 20, "male", 1000);
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.findById(employee.getId())).thenReturn(employee);
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -71,7 +69,7 @@ class EmployeeServiceTest {
         //given
         Employee employee = new Employee(1, "", 20, "male", 1000);
         Employee expectedEmployee = new Employee(1, "Cedric", 19, "female", 6600);
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.update(employee.getId(), employee)).thenReturn(expectedEmployee);
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -86,7 +84,7 @@ class EmployeeServiceTest {
     void should_trigger_repository_delete_once_when_service_delete_called_given_1_employee() {
         //given
         Employee employee = new Employee(1, "", 20, "male", 1000);
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
 
         EmployeeService employeeService = new EmployeeService(repository);
         //when
@@ -101,7 +99,7 @@ class EmployeeServiceTest {
         Employee firstEmployee = new Employee(1, "Cedric", 20, "male", 1000);
         Employee secondEmployee = new Employee(2, "Jaycee", 20, "male", 1000);
         Employee thirdEmployee = new Employee(3, "Lisa", 20, "female", 1000);
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.findByGender("male")).thenReturn(asList(firstEmployee, secondEmployee));
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -118,7 +116,7 @@ class EmployeeServiceTest {
         Employee firstEmployee = new Employee(1, "Cedric", 20, "male", 1000);
         Employee secondEmployee = new Employee(2, "Jaycee", 20, "male", 1000);
         int page = 1, pageSize = 2;
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.getAll()).thenReturn(asList(firstEmployee, secondEmployee));
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -136,7 +134,7 @@ class EmployeeServiceTest {
         Employee firstEmployee = new Employee(1, "Cedric", 20, "male", 1000);
         Employee secondEmployee = new Employee(2, "Jaycee", 20, "male", 1000);
         int page = 1, pageSize = 5;
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.getAll()).thenReturn(asList(firstEmployee, secondEmployee));
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -155,7 +153,7 @@ class EmployeeServiceTest {
         Employee secondEmployee = new Employee(2, "Jaycee", 20, "male", 1000);
         Employee thirdEmployee = new Employee(3, "Shana", 20, "male", 1000);
         int page = 2, pageSize = 2;
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.getAll()).thenReturn(asList(firstEmployee, secondEmployee, thirdEmployee));
         EmployeeService employeeService = new EmployeeService(repository);
 
@@ -172,7 +170,7 @@ class EmployeeServiceTest {
     void should_return_0_employee_when_getByEmployeeByPage_given_0_employees_page_1_and_pageSize_2() {
         //given
         int page = 1, pageSize = 2;
-        EmployeeRepository repository = mock(EmployeeRepository.class);
+        EmployeeRepositoryLegacy repository = mock(EmployeeRepositoryLegacy.class);
         when(repository.getAll()).thenReturn(Collections.emptyList());
         EmployeeService employeeService = new EmployeeService(repository);
 

@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.services;
 
 import com.thoughtworks.springbootemployee.models.Employee;
-import com.thoughtworks.springbootemployee.repositories.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repositories.EmployeeRepositoryLegacy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
 
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryLegacy employeeRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepositoryLegacy employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 

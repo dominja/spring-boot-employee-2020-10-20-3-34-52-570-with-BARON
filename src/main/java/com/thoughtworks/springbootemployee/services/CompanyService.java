@@ -2,7 +2,7 @@ package com.thoughtworks.springbootemployee.services;
 
 import com.thoughtworks.springbootemployee.models.Company;
 import com.thoughtworks.springbootemployee.models.Employee;
-import com.thoughtworks.springbootemployee.repositories.CompanyRepository;
+import com.thoughtworks.springbootemployee.repositories.CompanyRepositoryLegacy;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
-    private CompanyRepository companyRepository;
+    private CompanyRepositoryLegacy companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyRepositoryLegacy companyRepository) {
         this.companyRepository = companyRepository;
     }
 

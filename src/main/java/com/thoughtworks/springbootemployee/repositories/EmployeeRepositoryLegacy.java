@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class EmployeeRepository {
+public class EmployeeRepositoryLegacy {
     private List<Employee> employees = new ArrayList<>();
 
     public List<Employee> getAll() {
