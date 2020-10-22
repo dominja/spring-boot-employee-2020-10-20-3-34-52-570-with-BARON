@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/companies")
@@ -40,8 +41,7 @@ public class CompaniesController {
     }
 
     @GetMapping("/{companyId}")
-    public Company searchById(@PathVariable("companyId") Integer companyId) {
-
+    public Optional<Company> searchById(@PathVariable("companyId") Integer companyId) {
         return companyService.searchById(companyId);
     }
 
@@ -62,7 +62,7 @@ public class CompaniesController {
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Company> getCompaniesByPageAndPageSize(@RequestParam("page") Integer page,
-                                              @RequestParam("pageSize") Integer pageSize) {
+                                                       @RequestParam("pageSize") Integer pageSize) {
         return companyService.getCompaniesByPageAndPageSize(page, pageSize);
     }
 }
