@@ -1,4 +1,4 @@
-package com.thoughtworks.springbootemployee.models;
+package com.thoughtworks.springbootemployee.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

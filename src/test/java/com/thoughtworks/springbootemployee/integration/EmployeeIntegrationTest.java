@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.integration;
 
 import com.google.gson.Gson;
-import com.thoughtworks.springbootemployee.models.Employee;
+import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

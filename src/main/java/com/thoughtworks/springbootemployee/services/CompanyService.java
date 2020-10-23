@@ -1,8 +1,8 @@
 package com.thoughtworks.springbootemployee.services;
 
-import com.thoughtworks.springbootemployee.exceptionhandler.IDNotFoundException;
-import com.thoughtworks.springbootemployee.models.Company;
-import com.thoughtworks.springbootemployee.models.Employee;
+import com.thoughtworks.springbootemployee.exception.IDNotFoundException;
+import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
