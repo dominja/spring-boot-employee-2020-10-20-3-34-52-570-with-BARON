@@ -1,5 +1,8 @@
 package com.thoughtworks.springbootemployee.services;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.springframework.data.domain.PageRequest;
@@ -8,36 +11,48 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
 
     private IEmployeeRepository employeeRepository;
+    private EmployeeMapper employeeMapper;
 
-    public EmployeeService(IEmployeeRepository employeeRepository) {
+    public EmployeeService(IEmployeeRepository employeeRepository,EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
+        this.employeeMapper=employeeMapper;
     }
 
-    public List<Employee> getAll() {
-        return employeeRepository.findAll();
+    public List<EmployeeResponse> getAll() {
+        List<Employee> employeeList = employeeRepository.findAll();
+        return employeeList.stream().map(employeeMapper::toResponse).collect(Collectors.toList());
     }
 
-    public Employee create(Employee newEmployee) {
-        return employeeRepository.save(newEmployee);
+    public EmployeeResponse create(EmployeeRequest newEmployee) {
+        Employee updatedEmployee;
+        updatedEmployee = employeeRepository.save(employeeMapper.toEntity(newEmployee));
+        return employeeMapper.toResponse(updatedEmployee);
     }
 
-    public Optional<Employee> searchById(Integer id) {
-        return employeeRepository.findById(id);
-    }
-
-    public Employee update(Integer id, Employee employee) {
+    public EmployeeResponse searchById(Integer id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        return employeeMapper.toResponse(optionalEmployee.orElse(null));
+    }
+
+    public EmployeeResponse update(Integer id, EmployeeRequest employee) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        Employee updatedEmployee;
+
         if (optionalEmployee.isPresent()) {
             optionalEmployee.get().setSalary(employee.getSalary());
             optionalEmployee.get().setAge(employee.getAge());
             optionalEmployee.get().setGender(employee.getGender());
             optionalEmployee.get().setName(employee.getName());
-            return employeeRepository.save(optionalEmployee.get());
+
+            employeeRepository.save(optionalEmployee.get());
+            updatedEmployee = employeeRepository.save(employeeMapper.toEntity(employee));
+            return employeeMapper.toResponse(updatedEmployee);
         }
         return null;
     }
@@ -46,13 +61,14 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public List<Employee> searchByGender(String gender) {
-        return employeeRepository.findByGender(gender);
+    public List<EmployeeResponse> searchByGender(String gender) {
+        List<Employee> employeeList = employeeRepository.findByGender(gender);
+        return employeeList.stream().map(employeeMapper::toResponse).collect(Collectors.toList());
     }
 
-    public List<Employee> getEmployeeByPageAndPageSize(int page, int pageSize) {
+    public List<EmployeeResponse> getEmployeeByPageAndPageSize(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-
-        return employeeRepository.findAll(pageable).toList();
+        List<Employee> employeeList = employeeRepository.findAll(pageable).toList();
+        return employeeList.stream().map(employeeMapper::toResponse).collect(Collectors.toList());
     }
 }
