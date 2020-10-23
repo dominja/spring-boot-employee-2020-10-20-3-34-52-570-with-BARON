@@ -19,25 +19,21 @@ public class EmployeeService {
     private IEmployeeRepository employeeRepository;
     private EmployeeMapper employeeMapper;
 
-    public EmployeeService(IEmployeeRepository employeeRepository,EmployeeMapper employeeMapper) {
+    public EmployeeService(IEmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
-        this.employeeMapper=employeeMapper;
+        this.employeeMapper = employeeMapper;
     }
 
-    public List<EmployeeResponse> getAll() {
-        List<Employee> employeeList = employeeRepository.findAll();
-        return employeeList.stream().map(employeeMapper::toResponse).collect(Collectors.toList());
+    public List<Employee> getAll() {
+        return employeeRepository.findAll();
     }
 
-    public EmployeeResponse create(EmployeeRequest newEmployee) {
-        Employee updatedEmployee;
-        updatedEmployee = employeeRepository.save(employeeMapper.toEntity(newEmployee));
-        return employeeMapper.toResponse(updatedEmployee);
+    public Employee create(Employee newEmployee) {
+        return employeeRepository.save(newEmployee);
     }
 
-    public EmployeeResponse searchById(Integer id) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        return employeeMapper.toResponse(optionalEmployee.orElse(null));
+    public Optional<Employee> searchById(Integer id) {
+        return employeeRepository.findById(id);
     }
 
     public EmployeeResponse update(Integer id, EmployeeRequest employee) {
