@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
+import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,13 @@ import java.util.Optional;
 
 @Service
 public class CompanyService {
+    private static final String COMPANY_ID_S_DOES_NOT_EXIST = "Company ID %s does not exist!";
     private ICompanyRepository companyRepository;
+    private IEmployeeRepository employeeRepository;
 
-    public CompanyService(ICompanyRepository companyRepository) {
+    public CompanyService(ICompanyRepository companyRepository, IEmployeeRepository employeeRepository) {
         this.companyRepository = companyRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Company> getAll() {
@@ -29,7 +33,7 @@ public class CompanyService {
 
     public Company searchById(Integer id) {
         return companyRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Company ID does not exist!"));
+                () -> new NotFoundException(String.format(COMPANY_ID_S_DOES_NOT_EXIST, id)));
     }
 
     public List<Employee> getEmployeesByCompanyId(Integer id) {
@@ -37,16 +41,17 @@ public class CompanyService {
         if (optionalCompany.isPresent()) {
             return optionalCompany.get().getEmployees();
         }
-        throw new NotFoundException("Company ID does not exist!");
+        throw new NotFoundException(String.format(COMPANY_ID_S_DOES_NOT_EXIST, id));
     }
 
     public Company update(Integer id, Company updatedCompany) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
         if (optionalCompany.isPresent()) {
             optionalCompany.get().setCompanyName(updatedCompany.getCompanyName());
+            updatedCompany.getEmployees().forEach(employee -> employeeRepository.save(employee));
             return companyRepository.save(optionalCompany.get());
         }
-        throw new NotFoundException("Company ID does not exist!");
+        throw new NotFoundException(String.format(COMPANY_ID_S_DOES_NOT_EXIST, id));
     }
 
     public void delete(Integer id) {

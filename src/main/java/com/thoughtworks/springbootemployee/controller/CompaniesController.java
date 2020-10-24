@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +31,8 @@ public class CompaniesController {
     private CompanyMapper companyMapper;
     private EmployeeMapper employeeMapper;
 
-    public CompaniesController(CompanyService companyService, CompanyMapper companyMapper, EmployeeMapper employeeMapper) {
+    public CompaniesController(CompanyService companyService,
+                               CompanyMapper companyMapper, EmployeeMapper employeeMapper) {
         this.companyService = companyService;
         this.companyMapper = companyMapper;
         this.employeeMapper = employeeMapper;
@@ -79,7 +79,7 @@ public class CompaniesController {
 
     @GetMapping(params = {"page", "pageSize"})
     public List<CompanyResponse> getCompaniesByPageAndPageSize(@RequestParam("page") Integer page,
-                                                       @RequestParam("pageSize") Integer pageSize) {
+                                                               @RequestParam("pageSize") Integer pageSize) {
         List<Company> companies = companyService.getCompaniesByPageAndPageSize(page, pageSize);
         return companies.stream().map(companyMapper::toResponse).collect(Collectors.toList());
     }

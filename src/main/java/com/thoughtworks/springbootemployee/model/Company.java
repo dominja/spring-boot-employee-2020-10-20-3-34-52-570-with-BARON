@@ -1,7 +1,6 @@
 package com.thoughtworks.springbootemployee.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,14 +17,13 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Integer company_id;
+    private Integer companyId;
     private String companyName;
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id")
     private List<Employee> employees;
 
     public Company() {
-
     }
 
     public Company(String companyName, List<Employee> employees) {
@@ -33,12 +31,12 @@ public class Company {
         this.employees = employees;
     }
 
-    public Integer getCompany_id() {
-        return company_id;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(Integer company_id) {
-        this.company_id = company_id;
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 
     public String getCompanyName() {
