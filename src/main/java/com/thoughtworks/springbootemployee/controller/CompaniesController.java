@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Company;
@@ -58,8 +59,10 @@ public class CompaniesController {
     }
 
     @GetMapping("/{companyId}/employees")
-    public List<Employee> getEmployeesByCompanyId(@PathVariable("companyId") Integer companyId) {
-        return companyService.getEmployeesByCompanyId(companyId);
+    public List<EmployeeResponse> getEmployeesByCompanyId(@PathVariable("companyId") Integer companyId) {
+        List<Employee> employees = companyService.getEmployeesByCompanyId(companyId);
+        return employees.stream().map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/{companyId}")
