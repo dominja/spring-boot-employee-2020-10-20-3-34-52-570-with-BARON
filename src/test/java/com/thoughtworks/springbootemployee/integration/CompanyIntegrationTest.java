@@ -142,4 +142,25 @@ class CompanyIntegrationTest {
                 .andExpect(jsonPath("$.companyName").value("00CL"))
                 .andExpect(jsonPath("$.employees").isEmpty());
     }
+
+    @Test
+    void should_return_employee_when_search_by_employees_given_companyID() throws Exception {
+        //given
+        Employee employee1 = new Employee("nelly", 18, "female", 10);
+        Employee employee2 = new Employee("baron", 18, "female", 10);
+        Employee employee3 = new Employee("momo", 18, "female", 10);
+
+        Company company = new Company("00CL", Arrays.asList(employee1,employee2,employee3));
+        companyRepository.save(company);
+
+        // when then
+        mockMvc.perform(get("/companies/" + company.getCompanyId()+"/employees"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].name").value("nelly"))
+                .andExpect(jsonPath("$[0].age").value(18))
+                .andExpect(jsonPath("$[0].gender").value("female"))
+                .andExpect(jsonPath("$[0].salary").value(10));
+    }
+
 }
