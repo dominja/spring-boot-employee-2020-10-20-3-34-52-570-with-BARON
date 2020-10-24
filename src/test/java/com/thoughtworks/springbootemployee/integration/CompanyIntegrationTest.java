@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.integration;
 
 import com.google.gson.Gson;
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -66,6 +67,27 @@ class CompanyIntegrationTest {
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.companyName").value("00CL"))
                 .andExpect(jsonPath("$.employees").isEmpty());
+    }
+    @Test
+    void should_return_2_company_when_findall_using_pagination_given_3_employees_page_1_pageSize_2() throws Exception {
+        //given
+        Company company1 = new Company("00CL", Collections.emptyList());
+        Company company2 = new Company("00CLL", Collections.emptyList());
+        Company company3 = new Company("Yangmin", Collections.emptyList());
+
+        companyRepository.save(company1);
+        companyRepository.save(company2);
+        companyRepository.save(company3);
+
+        // when then
+        mockMvc.perform(get("/companies?page=1&pageSize=2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].companyName").value("00CL"))
+                .andExpect(jsonPath("$[0].employees").isEmpty())
+                .andExpect(jsonPath("$[1].id").isNumber())
+                .andExpect(jsonPath("$[1].companyName").value("00CLL"))
+                .andExpect(jsonPath("$[1].employees").isEmpty());
     }
 
 }
