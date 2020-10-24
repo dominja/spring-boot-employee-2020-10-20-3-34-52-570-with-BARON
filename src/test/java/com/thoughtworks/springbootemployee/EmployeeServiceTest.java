@@ -64,11 +64,11 @@ class EmployeeServiceTest {
         EmployeeService employeeService = new EmployeeService(repository);
 
         //when
-        Optional<Employee> fetchedEmployee = employeeService.searchById(employee.getId());
+        Employee fetchedEmployee = employeeService.searchById(employee.getId());
 
         //then
-        assertNotNull(fetchedEmployee.get());
-        assertSame(employee, fetchedEmployee.get());
+        assertNotNull(fetchedEmployee);
+        assertSame(employee, fetchedEmployee);
     }
 
     @Test
