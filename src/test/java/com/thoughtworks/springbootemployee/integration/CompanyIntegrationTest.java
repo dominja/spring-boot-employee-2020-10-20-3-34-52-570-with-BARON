@@ -90,4 +90,18 @@ class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[1].employees").isEmpty());
     }
 
+    @Test
+    void should_return_company_when_search_by_id_given_companyID() throws Exception {
+        //given
+        Company company = new Company("00CL", Collections.emptyList());
+        Company createdEmployee = companyRepository.save(company);
+        // when then
+        mockMvc.perform(get("/companies/" + createdEmployee.getCompanyId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value("00CL"))
+                .andExpect(jsonPath("$.employees").isEmpty());
+    }
+
+
 }
