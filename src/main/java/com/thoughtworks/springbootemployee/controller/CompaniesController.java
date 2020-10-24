@@ -52,8 +52,9 @@ public class CompaniesController {
     }
 
     @GetMapping("/{companyId}")
-    public Optional<Company> searchById(@PathVariable("companyId") Integer companyId) {
-        return companyService.searchById(companyId);
+    public CompanyResponse searchById(@PathVariable("companyId") Integer companyId) {
+        Company company = companyService.searchById(companyId);
+        return companyMapper.toResponse(company);
     }
 
     @GetMapping("/{companyId}/employees")

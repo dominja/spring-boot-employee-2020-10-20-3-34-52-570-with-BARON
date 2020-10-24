@@ -27,8 +27,9 @@ public class CompanyService {
         return companyRepository.save(newCompany);
     }
 
-    public Optional<Company> searchById(Integer id) {
-        return companyRepository.findById(id);
+    public Company searchById(Integer id) {
+        return companyRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Company not Found!"));
     }
 
     public List<Employee> getEmployeesByCompanyId(Integer id) {
