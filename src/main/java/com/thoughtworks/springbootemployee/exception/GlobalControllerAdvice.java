@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(IDNotFoundException exception) {
+    public ErrorResponse handleNotFoundException(NotFoundException exception) {
         return new ErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND.name());
     }
 }

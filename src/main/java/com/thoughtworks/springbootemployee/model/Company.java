@@ -25,9 +25,6 @@ public class Company {
     @JoinColumn(name = "company_id")
     private List<Employee> employees;
 
-    public Company() {
-    }
-
     public Company(String companyName, List<Employee> employees) {
         this.companyName = companyName;
         this.employees = employees;
@@ -57,8 +54,5 @@ public class Company {
         this.id = id;
     }
 
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
 
 }

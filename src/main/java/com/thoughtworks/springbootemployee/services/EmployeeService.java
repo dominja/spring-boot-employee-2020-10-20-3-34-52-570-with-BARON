@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.services;
 
-import com.thoughtworks.springbootemployee.exception.IDNotFoundException;
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +29,11 @@ public class EmployeeService {
 
     public Employee searchById(Integer id) {
         return employeeRepository.findById(id).orElseThrow(
-                () -> new IDNotFoundException("Employee ID not Found!"));
+                () -> new NotFoundException(String.format("Employee with an ID of %s not Found!", id)));
     }
 
     public Employee update(Integer id, Employee employee) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        Employee updatedEmployee;
 
         if (optionalEmployee.isPresent()) {
             optionalEmployee.get().setSalary(employee.getSalary());
@@ -42,10 +41,9 @@ public class EmployeeService {
             optionalEmployee.get().setGender(employee.getGender());
             optionalEmployee.get().setName(employee.getName());
 
-            updatedEmployee = employeeRepository.save(optionalEmployee.get());
-            return updatedEmployee;
+            return employeeRepository.save(optionalEmployee.get());
         }
-        return null;
+        throw new NotFoundException(String.format("Employee with an ID of %s not Found!", id));
     }
 
     public void delete(Integer id) {
@@ -53,7 +51,11 @@ public class EmployeeService {
     }
 
     public List<Employee> searchByGender(String gender) {
-        return employeeRepository.findByGender(gender);
+        try {
+            return employeeRepository.findByGender(gender);
+        } catch (NotFoundException exception) {
+            throw new NotFoundException("None of the employees are " + gender);
+        }
     }
 
     public List<Employee> getEmployeeByPageAndPageSize(int page, int pageSize) {

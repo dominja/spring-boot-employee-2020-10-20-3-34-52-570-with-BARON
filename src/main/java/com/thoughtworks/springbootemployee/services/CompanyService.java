@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.services;
 
-import com.thoughtworks.springbootemployee.exception.IDNotFoundException;
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
@@ -36,7 +36,7 @@ public class CompanyService {
         if (optionalCompany.isPresent()) {
             return optionalCompany.get().getEmployees();
         }
-        throw new IDNotFoundException("Company ID does not exist!");
+        throw new NotFoundException("Company ID does not exist!");
     }
 
     public Company update(Integer id, Company updatedCompany) {
