@@ -48,7 +48,10 @@ public class CompanyService {
         Optional<Company> optionalCompany = companyRepository.findById(id);
         if (optionalCompany.isPresent()) {
             optionalCompany.get().setCompanyName(updatedCompany.getCompanyName());
-            updatedCompany.getEmployees().forEach(employee -> employeeRepository.save(employee));
+            List<Employee> updatedEmployees = updatedCompany.getEmployees();
+            if (updatedEmployees != null) {
+                updatedEmployees.forEach(employee -> employeeRepository.save(employee));
+            }
             return companyRepository.save(optionalCompany.get());
         }
         throw new NotFoundException(String.format(COMPANY_ID_S_DOES_NOT_EXIST, id));

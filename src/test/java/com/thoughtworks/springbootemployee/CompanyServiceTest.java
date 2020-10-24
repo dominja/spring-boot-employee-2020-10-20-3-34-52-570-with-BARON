@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
+import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import com.thoughtworks.springbootemployee.services.CompanyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ class CompanyServiceTest {
     void should_return_2_companies_when_get_companies_given_2_companies() {
         //given
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
 
         List<Employee> employeeList = Arrays.asList(
                 new Employee("nelly", 18, "female", 10),
@@ -42,7 +44,7 @@ class CompanyServiceTest {
         when(companyRepository.findAll()).thenReturn(asList(new Company("OOCL", employeeList),
                 new Company("SM", employeeList2)));
 
-        CompanyService companyService = new CompanyService(companyRepository);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
         Integer companyCount = companyService.getAll().size();
@@ -61,8 +63,9 @@ class CompanyServiceTest {
 
         Company newCompany = new Company("OOCL", employeeList);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
         when(companyRepository.save(newCompany)).thenReturn(newCompany);
-        CompanyService companyService = new CompanyService(companyRepository);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
         Company company = companyService.create(newCompany);
@@ -83,8 +86,9 @@ class CompanyServiceTest {
         Company newCompany = new Company("OOCL", employeeList);
 
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
         when(companyRepository.save(newCompany)).thenReturn(newCompany);
-        CompanyService companyService = new CompanyService(companyRepository);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
         Company company = companyService.create(newCompany);
@@ -105,8 +109,9 @@ class CompanyServiceTest {
 
         Company company = new Company("OOCL", employeeList);
         ICompanyRepository repository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
         when(repository.findById(company.getCompanyId())).thenReturn(Optional.of(company));
-        CompanyService companyService = new CompanyService(repository);
+        CompanyService companyService = new CompanyService(repository, employeeRepository);
 
         //when
         Company fetchedCompany = companyService.searchById(company.getCompanyId());
@@ -125,8 +130,9 @@ class CompanyServiceTest {
         Company newCompany = new Company("OOCL", Arrays.asList(firstEmployee, secondEmployee));
         newCompany.setCompanyId(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
         when(companyRepository.findById(1)).thenReturn(Optional.of(newCompany));
-        CompanyService companyService = new CompanyService(companyRepository);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
         //when
         List<Employee> employees = companyService.getEmployeesByCompanyId(1);
 
@@ -146,7 +152,10 @@ class CompanyServiceTest {
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
         when(companyRepository.findById(1)).thenReturn(Optional.of(company));
         when(companyRepository.save(company)).thenReturn(expectedCompany);
-        CompanyService companyService = new CompanyService(companyRepository);
+
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
+
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
         Company updatedCompany = companyService.update(company.getCompanyId(), expectedCompany);
@@ -161,8 +170,9 @@ class CompanyServiceTest {
         Company company = new Company("OOCL", null);
         company.setCompanyId(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
 
-        CompanyService companyService = new CompanyService(companyRepository);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
         companyService.delete(company.getCompanyId());
@@ -179,10 +189,11 @@ class CompanyServiceTest {
         int page = 1, pageSize = 2;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        IEmployeeRepository employeeRepository = mock(IEmployeeRepository.class);
         Page<Company> mockPage = mock(Page.class);
         when(companyRepository.findAll(pageable)).thenReturn(mockPage);
         when(companyRepository.findAll(pageable).toList()).thenReturn(asList(firstCompany, secondCompany));
-        CompanyService companyService = new CompanyService(companyRepository);
+        CompanyService companyService = new CompanyService(companyRepository, employeeRepository);
 
         //when
         List<Company> fetchedCompanies = companyService.getCompaniesByPageAndPageSize(page, pageSize);
