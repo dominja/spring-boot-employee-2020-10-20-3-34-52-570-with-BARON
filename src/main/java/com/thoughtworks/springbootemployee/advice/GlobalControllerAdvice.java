@@ -1,5 +1,6 @@
-package com.thoughtworks.springbootemployee.exception;
+package com.thoughtworks.springbootemployee.advice;
 
+import com.thoughtworks.springbootemployee.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
