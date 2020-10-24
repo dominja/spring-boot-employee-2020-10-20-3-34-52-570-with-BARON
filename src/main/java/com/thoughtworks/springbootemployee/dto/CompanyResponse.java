@@ -18,6 +18,14 @@ public class CompanyResponse {
         this.employees = employees;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getCompanyName() {
         return companyName;
     }
@@ -30,17 +38,7 @@ public class CompanyResponse {
         return employees;
     }
 
-    public int getEmployeeNumber() {
-        return employees.size();
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-
 }

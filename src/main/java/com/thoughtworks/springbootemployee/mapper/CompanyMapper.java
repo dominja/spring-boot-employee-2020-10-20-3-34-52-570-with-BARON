@@ -12,7 +12,7 @@ public class CompanyMapper {
         CompanyResponse companyResponse = new CompanyResponse();
         BeanUtils.copyProperties(company, companyResponse);
 
-        companyResponse.setId(company.getId());
+        companyResponse.setId(company.getCompany_id());
         return companyResponse;
     }
 

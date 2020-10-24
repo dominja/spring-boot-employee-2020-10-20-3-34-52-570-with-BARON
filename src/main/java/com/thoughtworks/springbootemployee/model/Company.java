@@ -14,14 +14,13 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-@JsonPropertyOrder({"companyName", "employeeNumber", "employees"})
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Integer id;
+    private Integer company_id;
     private String companyName;
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "company_id")
     private List<Employee> employees;
 
@@ -32,6 +31,14 @@ public class Company {
     public Company(String companyName, List<Employee> employees) {
         this.companyName = companyName;
         this.employees = employees;
+    }
+
+    public Integer getCompany_id() {
+        return company_id;
+    }
+
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
     }
 
     public String getCompanyName() {
@@ -46,17 +53,7 @@ public class Company {
         return employees;
     }
 
-    public int getEmployeeNumber() {
-        return employees.size();
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-
 }

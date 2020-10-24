@@ -92,7 +92,7 @@ class CompanyServiceTest {
         //then
         assertEquals("OOCL", company.getCompanyName());
         assertSame(newCompany, company);
-        assertEquals(3, company.getEmployeeNumber());
+        assertEquals(3, company.getEmployees().size());
     }
 
     @Test
@@ -105,11 +105,11 @@ class CompanyServiceTest {
 
         Company company = new Company("OOCL", employeeList);
         ICompanyRepository repository = mock(ICompanyRepository.class);
-        when(repository.findById(company.getId())).thenReturn(Optional.of(company));
+        when(repository.findById(company.getCompany_id())).thenReturn(Optional.of(company));
         CompanyService companyService = new CompanyService(repository);
 
         //when
-        Optional<Company> fetchedCompany = companyService.searchById(company.getId());
+        Optional<Company> fetchedCompany = companyService.searchById(company.getCompany_id());
 
         //then
         assertNotNull(company);
@@ -123,7 +123,7 @@ class CompanyServiceTest {
         Employee firstEmployee = new Employee("nelly", 18, "female", 10);
         Employee secondEmployee = new Employee("nelly", 18, "female", 10);
         Company newCompany = new Company("OOCL", Arrays.asList(firstEmployee, secondEmployee));
-        newCompany.setId(1);
+        newCompany.setCompany_id(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
         when(companyRepository.findById(1)).thenReturn(Optional.of(newCompany));
         CompanyService companyService = new CompanyService(companyRepository);
@@ -140,16 +140,16 @@ class CompanyServiceTest {
     void should_return_updated_company_with_retained_employee_when_update_given_company_with_two_employees_and_field_updates() {
         //given
         Company company = new Company("OOCL", null);
-        company.setId(1);
+        company.setCompany_id(1);
         Company expectedCompany = new Company("OOIL", null);
-        expectedCompany.setId(1);
+        expectedCompany.setCompany_id(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
         when(companyRepository.findById(1)).thenReturn(Optional.of(company));
         when(companyRepository.save(company)).thenReturn(expectedCompany);
         CompanyService companyService = new CompanyService(companyRepository);
 
         //when
-        Company updatedCompany = companyService.update(company.getId(), expectedCompany);
+        Company updatedCompany = companyService.update(company.getCompany_id(), expectedCompany);
 
         //then
         assertSame(expectedCompany, updatedCompany);
@@ -159,13 +159,13 @@ class CompanyServiceTest {
     void should_trigger_repository_delete_once_when_service_delete_called_given_company_id() {
         //given
         Company company = new Company("OOCL", null);
-        company.setId(1);
+        company.setCompany_id(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
 
         CompanyService companyService = new CompanyService(companyRepository);
 
         //when
-        companyService.delete(company.getId());
+        companyService.delete(company.getCompany_id());
 
         //then
         verify(companyRepository, times(1)).deleteById(1);

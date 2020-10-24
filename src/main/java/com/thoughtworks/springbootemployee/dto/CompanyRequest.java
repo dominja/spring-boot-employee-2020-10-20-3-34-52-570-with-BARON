@@ -25,12 +25,12 @@ public class CompanyRequest {
         this.companyName = companyName;
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 
-    public int getEmployeeNumber() {
-        return employees.size();
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
 }

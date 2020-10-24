@@ -1,6 +1,6 @@
 CREATE TABLE company
 (
-    id              bigint          NOT NULL PRIMARY KEY auto_increment,
+    company_id      bigint          NOT NULL PRIMARY KEY auto_increment,
     company_name    VARCHAR(30)     NOT NULL
 );
 CREATE TABLE employee
@@ -11,5 +11,5 @@ CREATE TABLE employee
     gender          VARCHAR(10),
     salary          bigint,
     company_id      bigint,
-    FOREIGN KEY     (company_id)    REFERENCES company (id)
+    FOREIGN KEY     (company_id)    REFERENCES company (company_id)
 );
