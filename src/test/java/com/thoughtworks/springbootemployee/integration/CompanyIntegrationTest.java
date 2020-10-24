@@ -129,4 +129,17 @@ class CompanyIntegrationTest {
                  .andExpect(jsonPath("$.companyName").value(updatedCompanyRequest.getCompanyName()))
                  .andExpect(jsonPath("$.employees").isArray());
          }
+
+    @Test
+    void should_return_company_when_search_by_id_given_companyID() throws Exception {
+        //given
+        Company company = new Company("00CL", Collections.emptyList());
+        Company newCompany = companyRepository.save(company);
+        // when then
+        mockMvc.perform(get("/companies/" + newCompany.getCompanyId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value("00CL"))
+                .andExpect(jsonPath("$.employees").isEmpty());
+    }
 }
