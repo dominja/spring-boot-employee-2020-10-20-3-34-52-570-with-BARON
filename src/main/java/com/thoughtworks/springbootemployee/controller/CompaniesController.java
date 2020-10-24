@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.services.CompanyService;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class CompaniesController {
 
     private CompanyService companyService;
+    private CompanyMapper companyMapper;
 
     public CompaniesController(CompanyService companyService) {
         this.companyService = companyService;
