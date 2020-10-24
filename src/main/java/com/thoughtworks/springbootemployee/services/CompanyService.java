@@ -29,7 +29,7 @@ public class CompanyService {
 
     public Company searchById(Integer id) {
         return companyRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Company not Found!"));
+                () -> new NotFoundException("Company ID does not exist!"));
     }
 
     public List<Employee> getEmployeesByCompanyId(Integer id) {
@@ -46,7 +46,7 @@ public class CompanyService {
             optionalCompany.get().setCompanyName(updatedCompany.getCompanyName());
             return companyRepository.save(optionalCompany.get());
         }
-        return null;
+        throw new NotFoundException("Company ID does not exist!");
     }
 
     public void delete(Integer id) {
