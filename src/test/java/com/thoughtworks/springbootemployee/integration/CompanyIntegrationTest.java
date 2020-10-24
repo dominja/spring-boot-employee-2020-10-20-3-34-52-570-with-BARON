@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,4 +109,24 @@ class CompanyIntegrationTest {
         Optional<Company> fetchedCompany = companyRepository.findById(company.getCompanyId());
         assertFalse(fetchedCompany.isPresent());
     }
+     @Test
+         void should_return_updated_company_when_update_given_new_company() throws Exception {
+             //given
+         Employee employee1 = new Employee("nelly", 18, "female", 10);
+         Employee employee2 = new Employee("nelly", 18, "male", 10);
+
+         Company company = new Company("00CL", Arrays.asList(employee1,employee2));
+         Company newCompany=companyRepository.save(company);
+         Company updatedCompanyRequest=new Company("alibaba", Collections.emptyList());
+
+         // when then
+         mockMvc.perform(put("/companies/" + newCompany.getCompanyId())
+                 .content(gson.toJson(updatedCompanyRequest, Company.class))
+                 .accept(MediaType.APPLICATION_JSON)
+                 .contentType(MediaType.APPLICATION_JSON))
+                 .andExpect(status().isOk())
+                 .andExpect(jsonPath("$.id").value(newCompany.getCompanyId()))
+                 .andExpect(jsonPath("$.companyName").value(updatedCompanyRequest.getCompanyName()))
+                 .andExpect(jsonPath("$.employees").isArray());
+         }
 }
