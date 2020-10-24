@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,7 +47,8 @@ public class EmployeesController {
 
     @GetMapping("/{employeeId}")
     public EmployeeResponse searchById(@PathVariable("employeeId") Integer employeeId) {
-        return employeeMapper.toResponse(employeeService.searchById(employeeId));
+        Employee employee = employeeService.searchById(employeeId);
+        return employeeMapper.toResponse(employee);
     }
 
     @PutMapping("/{employeeId}")

@@ -29,7 +29,7 @@ public class EmployeeService {
 
     public Employee searchById(Integer id) {
         return employeeRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Employee with an ID of %s not Found!", id)));
+                () -> new NotFoundException("Employee ID not Found!"));
     }
 
     public Employee update(Integer id, Employee employee) {
