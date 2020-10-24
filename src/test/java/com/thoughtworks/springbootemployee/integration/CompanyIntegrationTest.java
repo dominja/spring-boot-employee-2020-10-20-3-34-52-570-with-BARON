@@ -14,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+import java.util.Optional;
 
+import static org.junit.Assert.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -91,17 +94,17 @@ class CompanyIntegrationTest {
     }
 
     @Test
-    void should_return_company_when_search_by_id_given_companyID() throws Exception {
-        //given
+    void should_delete_company_when_deleted() throws Exception {
+        // given
         Company company = new Company("00CL", Collections.emptyList());
-        Company createdEmployee = companyRepository.save(company);
-        // when then
-        mockMvc.perform(get("/companies/" + createdEmployee.getCompanyId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.companyName").value("00CL"))
-                .andExpect(jsonPath("$.employees").isEmpty());
+        Company newCompany=companyRepository.save(company);
+
+        // when
+        mockMvc.perform(delete("/companies/" + newCompany.getCompanyId()))
+                .andExpect(status().isOk());
+
+        // then
+        Optional<Company> fetchedCompany = companyRepository.findById(company.getCompanyId());
+        assertFalse(fetchedCompany.isPresent());
     }
-
-
 }
